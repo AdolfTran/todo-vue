@@ -18,9 +18,9 @@ export default {
     }
   },
   methods: {
-    login: function(){
+    login: function () {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-        (user) =>{
+        (user) => {
           this.$router.replace('list')
         },
         (err) => {

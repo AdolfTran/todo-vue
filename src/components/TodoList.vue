@@ -76,101 +76,101 @@
 </template>
 
 <script type="text/javascript">
-  import swal from 'sweetalert2'
-  import {Container, Draggable} from "vue-smooth-dnd";
-  import Todo from './Todo'
-  import CreateTodo from '@/components/CreateTodo'
-  import firebase, {todoRef} from "@/firebase"
+import swal from 'sweetalert2'
+import {Container, Draggable} from 'vue-smooth-dnd'
+import Todo from './Todo'
+import CreateTodo from '@/components/CreateTodo'
+import firebase, {todoRef} from '@/firebase'
 
-  export default {
-    components: {
-      Todo,
-      CreateTodo,
-      Container,
-      Draggable
+export default {
+  components: {
+    Todo,
+    CreateTodo,
+    Container,
+    Draggable
+  },
+  data () {
+    return {
+      todos: [],
+      currentUserId: ''
+    }
+  },
+  created () {
+    this.currentUserId = this.getUserId()
+    this.getListToDo()
+  },
+  methods: {
+    onColumnDrop: function (dropResult) {
+      console.log('onColumnDrop', dropResult)
+      // const scene = Object.assign({}, this.scene);
+      // scene.children = applyDrag(scene.children, dropResult);
+      // this.scene = scene;
     },
-    data() {
-      return {
-        todos: [],
-        currentUserId: ''
+
+    onCardDrop: function (columnId, dropResult) {
+      if (dropResult.addedIndex !== null) {
+        let newStatus = columnId
+        let idTodo = dropResult.droppedElement.id
+        todoRef.child(this.currentUserId).child(idTodo).update({status: newStatus})
       }
     },
-    created() {
-      this.currentUserId = this.getUserId()
-      this.getListToDo()
-    },
-    methods: {
-      onColumnDrop: function (dropResult) {
-        console.log('onColumnDrop', dropResult);
-        // const scene = Object.assign({}, this.scene);
-        // scene.children = applyDrag(scene.children, dropResult);
-        // this.scene = scene;
-      },
 
-      onCardDrop: function (columnId, dropResult) {
-        if (dropResult.addedIndex !== null) {
-          let newStatus = columnId
-          let idTodo = dropResult.droppedElement.id
-          todoRef.child(this.currentUserId).child(idTodo).update({status: newStatus})
+    getCardPayload: function (columnId) {
+      console.log('getCardPayload', columnId)
+      // return index => {
+      //   return this.scene.children.filter(p => p.id === columnId)[0].children[
+      //     index
+      //     ];
+      // };
+    },
+    dragStart: function () {},
+    log: function (...params) { },
+
+    deleteTodo (todo) {
+      swal({
+        title: 'Are you sure?',
+        text: 'This To-Do will be permanently deleted!',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          swal(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+          let idTodo = todo['.key']
+          todoRef.child(this.currentUserId).child(idTodo).remove()
         }
-      },
-
-      getCardPayload: function (columnId) {
-        console.log('getCardPayload', columnId);
-        // return index => {
-        //   return this.scene.children.filter(p => p.id === columnId)[0].children[
-        //     index
-        //     ];
-        // };
-      },
-      dragStart: function () {},
-      log: function (...params) { },
-
-      deleteTodo(todo) {
-        swal({
-          title: 'Are you sure?',
-          text: 'This To-Do will be permanently deleted!',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-          if (result.value) {
-            swal(
-              'Deleted!',
-              'Your file has been deleted.',
-              'success'
-            )
-            let idTodo = todo['.key']
-            todoRef.child(this.currentUserId).child(idTodo).remove()
-          }
-        })
-      },
-      completeTodo(todo) {
-        let idTodo = todo['.key']
-        let progress = todo.progress ? todo.progress : 0
-        todoRef.child(this.currentUserId).child(idTodo).update({
-          dueDate: todo.dueDate,
-          titleText: todo.titleText,
-          projectText: todo.projectText,
-          progress: progress <= 0 ? (progress > 100 ? 100 : progress) : 0
-        })
-        swal('Success!', 'To-Do completed!', 'success')
-      },
-      logout: function () {
-        firebase.auth().signOut().then(() => {
-          this.$router.replace('login')
-        })
-      },
-      getUserId() {
-        return firebase.auth().currentUser.uid
-      },
-      getListToDo() {
-        this.$bindAsArray('todos', todoRef.child(`${this.currentUserId}`))
-      }
+      })
+    },
+    completeTodo (todo) {
+      let idTodo = todo['.key']
+      let progress = todo.progress ? todo.progress : 0
+      todoRef.child(this.currentUserId).child(idTodo).update({
+        dueDate: todo.dueDate,
+        titleText: todo.titleText,
+        projectText: todo.projectText,
+        progress: progress <= 0 ? (progress > 100 ? 100 : progress) : 0
+      })
+      swal('Success!', 'To-Do completed!', 'success')
+    },
+    logout: function () {
+      firebase.auth().signOut().then(() => {
+        this.$router.replace('login')
+      })
+    },
+    getUserId () {
+      return firebase.auth().currentUser.uid
+    },
+    getListToDo () {
+      this.$bindAsArray('todos', todoRef.child(`${this.currentUserId}`))
     }
   }
+}
 </script>
 <style scoped>
   .min-height {

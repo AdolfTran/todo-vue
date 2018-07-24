@@ -18,7 +18,7 @@ export default {
     }
   },
   methods: {
-    signUp: function(){
+    signUp: function () {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
         (user) => {
           this.$router.replace('login')

@@ -34,9 +34,9 @@
 
 <script>
 import moment from 'moment'
-import firebase, {todoRef} from "@/firebase"
+import firebase, {todoRef} from '@/firebase'
 export default {
-  data() {
+  data () {
     return {
       isCreating: false,
       currentUserId: '',
@@ -50,31 +50,31 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.currentUserId = this.getUserId()
   },
   methods: {
-    openForm() {
+    openForm () {
       this.isCreating = true
     },
-    closeForm() {
+    closeForm () {
       this.isCreating = false
     },
-    sendForm() {
+    sendForm () {
       if (this.item.titleText) {
-        this.item.createDate = moment().unix();
+        this.item.createDate = moment().unix()
         this.addNewTodo()
       }
       this.isCreating = false
     },
-    getUserId() {
+    getUserId () {
       return firebase.auth().currentUser.uid
     },
-    addNewTodo() {
+    addNewTodo () {
       todoRef.child(this.currentUserId).push(this.item, () => {
         console.log('success')
       })
     }
   }
-};
+}
 </script>
