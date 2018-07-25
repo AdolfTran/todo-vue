@@ -10,7 +10,7 @@ Vue.use(Vuefire)
 
 let app
 
-firebase.auth().onAuthStateChanged(function(user){
+firebase.auth().onAuthStateChanged(function (user) {
   if (!app) {
     app = new Vue({
       el: '#app',
@@ -20,5 +20,3 @@ firebase.auth().onAuthStateChanged(function(user){
     })
   }
 })
-
-

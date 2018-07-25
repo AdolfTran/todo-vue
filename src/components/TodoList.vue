@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="border-bottom">Vue.js Todo App</h1>
-    <button v-on:click="logout">Logout</button>
+    <button v-on:click="logout" class="text-danger">Logout</button>
     <div class='container-fluid'>
       <create-todo v-on:a="createTodo"></create-todo>
       <Container orientation="horizontal"
