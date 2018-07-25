@@ -1,12 +1,12 @@
 import firebase from 'firebase'
 
 var config = {
-  apiKey: "AIzaSyCtDdflRwatzXVRKJIbUnoqGzqpnU5-0ko",
-  authDomain: "todolist-82f37.firebaseapp.com",
-  databaseURL: "https://todolist-82f37.firebaseio.com",
-  projectId: "todolist-82f37",
-  storageBucket: "todolist-82f37.appspot.com",
-  messagingSenderId: "97220304896"
+  apiKey: "YOUR-API",
+  authDomain: "DOMIAN",
+  databaseURL: "DATABASE",
+  projectId: "PROJECT-ID",
+  storageBucket: "STORAGE",
+  messagingSenderId: "M"
 }
 firebase.initializeApp(config)
 
