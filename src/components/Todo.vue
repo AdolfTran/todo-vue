@@ -57,43 +57,42 @@
 </template>
 
 <script type="text/javascript">
-  import {Draggable} from "vue-smooth-dnd";
+import {Draggable} from 'vue-smooth-dnd'
 
-  export default {
-    props: ['todo'],
-    components: {Draggable},
-    data() {
-      return {
-        statusText: [
-          'Todo', 'Doing', 'Completed', 'Pending'
-        ],
-        statusClass: [
-          'teal', 'blue', 'green', 'red'
-        ],
-        isEditing: false
-      }
-    },
-    methods: {
-      showForm() {
-        this.isEditing = true
-      },
-      hideForm() {
-        this.isEditing = false
-      },
-      deleteTodo(todo) {
-        this.$emit('delete-todo', todo)
-      },
-      completeTodo(todo) {
-        this.$emit('complete-todo', todo)
-        this.hideForm()
-      },
-      reformat(value) {
-        return value.replace(/(?:\r\n|\r|\n)/g, "<br>")
-      },
+export default {
+  props: ['todo'],
+  components: {Draggable},
+  data () {
+    return {
+      statusText: [
+        'Todo', 'Doing', 'Completed', 'Pending'
+      ],
+      statusClass: [
+        'teal', 'blue', 'green', 'red'
+      ],
+      isEditing: false
     }
-  };
+  },
+  methods: {
+    showForm () {
+      this.isEditing = true
+    },
+    hideForm () {
+      this.isEditing = false
+    },
+    deleteTodo (todo) {
+      this.$emit('delete-todo', todo)
+    },
+    completeTodo (todo) {
+      this.$emit('complete-todo', todo)
+      this.hideForm()
+    },
+    reformat (value) {
+      return value.replace(/(?:\r\n|\r|\n)/g, '<br>')
+    }
+  }
+}
 </script>
-
 
 <style scoped>
   .card-ghost {
