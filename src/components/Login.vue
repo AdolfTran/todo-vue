@@ -46,7 +46,6 @@ export default {
       if (this.password === this.confirmPassword) {
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
           (user) => {
-            alert('Success !')
             this.$router.replace('list')
           },
           (err) => {

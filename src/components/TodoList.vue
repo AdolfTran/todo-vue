@@ -100,33 +100,11 @@ export default {
     this.getListToDo()
   },
   methods: {
-    onColumnDrop: function (dropResult) {
-      console.log('onColumnDrop', dropResult)
-      // const scene = Object.assign({}, this.scene);
-      // scene.children = applyDrag(scene.children, dropResult);
-      // this.scene = scene;
-    },
-
-    onCardDrop: function (columnId, dropResult) {
-      if (dropResult.addedIndex !== null) {
-        let newStatus = columnId
-        let idTodo = dropResult.droppedElement.id
-        todoRef.child(this.currentUserId).child(idTodo).update({status: newStatus})
-      }
-    },
-
-    getCardPayload: function (columnId) {
-      console.log('getCardPayload', columnId)
-      // return index => {
-      //   return this.scene.children.filter(p => p.id === columnId)[0].children[
-      //     index
-      //     ];
-      // };
-    },
+    onColumnDrop: function (dropResult) {},
+    getCardPayload: function (columnId) {},
     dragStart: function () {},
-    log: function (...params) { },
-
-    deleteTodo (todo) {
+    log: function (...params) {},
+    deleteTodo(todo) {
       swal({
         title: 'Are you sure?',
         text: 'This To-Do will be permanently deleted!',
@@ -147,7 +125,7 @@ export default {
         }
       })
     },
-    completeTodo (todo) {
+    completeTodo(todo) {
       let idTodo = todo['.key']
       let progress = todo.progress ? todo.progress : 0
       todoRef.child(this.currentUserId).child(idTodo).update({
@@ -163,10 +141,10 @@ export default {
         this.$router.replace('login')
       })
     },
-    getUserId () {
+    getUserId() {
       return firebase.auth().currentUser.uid
     },
-    getListToDo () {
+    getListToDo() {
       this.$bindAsArray('todos', todoRef.child(`${this.currentUserId}`))
     }
   }
