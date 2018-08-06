@@ -5,15 +5,20 @@
           {{ todo.titleText }}
         </div>
         <div class='border container v-content' v-html="reformat(todo.projectText)"> </div>
-        <div class="progress mt-2" v-if="todo.status == 1">
+        <div class='border container v-content'> <p><b>Assignee: </b> {{todo.assignee}}</p> </div>
+        <div class='border container v-content'> <p><b>Estimation: </b> {{todo.estimate}} <b>hours</b></p> </div>
+        <div class="progress mt-2" v-if="todo.status == 3">
           <div class="progress-bar progress-bar-striped" role="progressbar" :style="'width:'  + (todo.progress ? todo.progress : 0) + '%'"> {{ todo.progress ? todo.progress : 0}} %</div>
+        </div>
+        <div class="progress mt-2" v-if="todo.status == 1">
+          <div class="progress-bar progress-bar-striped" role="progressbar" :style="'width:'  + (todo.testProgress ? todo.testProgress : 0) + '%'"> {{ todo.testProgress ? todo.testProgress : 0}} %</div>
         </div>
         <div class="row footer-todo">
           <div class="col-lg-6 text-left">
           {{ todo.dueDate }}
           </div>
           <div class='extra content col-lg-4'>
-            <span class='right floated edit icon' v-on:click="showForm">
+              <span class='right floated edit icon' v-on:click="showForm">
             <i class='edit icon'></i>
             </span>
               <span class='right floated trash icon' v-on:click="deleteTodo(todo)">
@@ -33,12 +38,28 @@
             <textarea type='text' v-model="todo.projectText" :rows="3" :amax-rows="6"></textarea>
           </div>
           <div class='field'>
+            <label>Assignee</label>
+            <select v-model="todo.assignee">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </div>
+          <div class='field'>
+            <label>Estimation</label>
+            <input type='number' v-model="todo.estimate">
+          </div>
+          <div class='field'>
             <label>Due date</label>
             <input v-model="todo.dueDate" type='date'>
           </div>
-          <div class='field' v-if="todo.status == 1">
+          <div class='field' v-if="todo.status == 3">
             <label>Progress</label>
             <input v-model="todo.progress" type='number'>
+          </div>
+          <div class='field' v-if="todo.status == 1">
+            <label>Progress</label>
+            <input v-model="todo.testProgress" type='number'>
           </div>
           <div>
             <button class='ui green button' v-on:click="completeTodo(todo)">
@@ -58,14 +79,13 @@
 
 <script type="text/javascript">
 import {Draggable} from 'vue-smooth-dnd'
-import {todoRef} from '@/firebase'
 export default {
   props: ['todo'],
   components: {Draggable},
   data () {
     return {
       statusText: [
-        'Todo', 'Doing', 'Completed', 'Pending'
+        'Todo', 'In Test', 'Completed', 'In Progress'
       ],
       statusClass: [
         'teal', 'blue', 'green', 'red'

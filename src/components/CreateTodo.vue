@@ -14,6 +14,19 @@
             <textarea type='text' v-model="item.projectText" ref='project' defaultValue="" :rows="3" :amax-rows="6"></textarea>
           </div>
           <div class='field'>
+            <label class="label">Assignee</label>
+            <select v-model="item.assignee">
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+            </select>
+          </div>
+          <div class='field estimate'>
+            <label class="label">Estimate</label>
+            <input v-model="item.estimate" type='number' ref='title'>
+            <p>Hours</p>
+          </div>
+          <div class='field'>
             <label class="label">Date</label>
             <input v-model="item.dueDate" type='date' ref='date'>
           </div>
@@ -42,9 +55,12 @@ export default {
         titleText: '',
         projectText: '',
         status: 0,
+        assignee: '',
+        estimate: 0,
         createDate: '',
         dueDate: '',
-        progress: 0
+        progress: 0,
+        testProgress: 0
       }
     }
   },
@@ -73,6 +89,8 @@ export default {
         console.log('success')
         this.item.titleText = ''
         this.item.projectText = ''
+        this.item.assignee = ''
+        this.item.estimate = 0
         this.item.createDate = ''
         this.item.dueDate = ''
       })
@@ -83,7 +101,7 @@ export default {
 <style>
   .v--modal-box{
     top: 210px !important;
-    height: 400px !important;
+    height: 600px !important;
   }
   .form {
     width: 80%;
@@ -96,5 +114,13 @@ export default {
   .btn{
     margin-top: 10px;
     width: 100% !important;
+  }
+  .estimate input{
+    width: 90% !important;
+  }
+  .estimate p{
+    position: relative;
+    top: -30px;
+    left: 440px;
   }
 </style>
