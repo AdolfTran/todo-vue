@@ -3,32 +3,30 @@
     <button class='ui basic button icon' v-on:click="openForm" v-show="!isCreating">
       <i class='plus icon'></i>
     </button>
-    <div class='ui centered card' v-show="isCreating">
-      <div class='content'>
+    <modal name="modal-create-todo" class='content'>
         <div class='ui form'>
           <div class='field'>
-            <label>Title</label>
-            <input v-model="item.titleText" type='text' ref='title' defaultValue="">
+            <label class="label">Title</label>
+            <input v-model="item.titleText" type='text' ref='title'>
           </div>
           <div class='field'>
-            <label>Project</label>
+            <label class="label">Project</label>
             <textarea type='text' v-model="item.projectText" ref='project' defaultValue="" :rows="3" :amax-rows="6"></textarea>
           </div>
           <div class='field'>
-            <label>Title</label>
-            <input v-model="item.dueDate" type='date' ref='title'>
+            <label class="label">Date</label>
+            <input v-model="item.dueDate" type='date' ref='date'>
           </div>
-          <div class='ui two button attached buttons'>
-            <button class='ui basic blue button' v-on:click="sendForm">
+          <div class='ui btn row'>
+            <button class='ui blue button col-lg-4' v-on:click="sendForm">
               Create
             </button>
-            <button class='ui basic red button' v-on:click="closeForm">
+            <button class='ui red button col-lg-4 col-lg-offset-1' v-on:click="closeForm">
               Cancel
             </button>
           </div>
         </div>
-      </div>
-    </div>
+    </modal>
   </div>
 </template>
 
@@ -55,17 +53,17 @@ export default {
   },
   methods: {
     openForm () {
-      this.isCreating = true
+      this.$modal.show('modal-create-todo')
     },
     closeForm () {
-      this.isCreating = false
+      this.$modal.hide('modal-create-todo')
     },
     sendForm () {
       if (this.item.titleText) {
         this.item.createDate = moment().unix()
         this.addNewTodo()
       }
-      this.isCreating = false
+      this.$modal.hide('modal-create-todo')
     },
     getUserId () {
       return firebase.auth().currentUser.uid
@@ -73,8 +71,30 @@ export default {
     addNewTodo () {
       todoRef.child(this.currentUserId).push(this.item, () => {
         console.log('success')
+        this.item.titleText = ''
+        this.item.projectText = ''
+        this.item.createDate = ''
+        this.item.dueDate = ''
       })
     }
   }
 }
 </script>
+<style>
+  .v--modal-box{
+    top: 210px !important;
+    height: 400px !important;
+  }
+  .form {
+    width: 80%;
+    margin: 40px auto;
+  }
+  .label{
+    font-size: 1.5rem !important;
+    margin-bottom: 10px!important;
+  }
+  .btn{
+    margin-top: 10px;
+    width: 100% !important;
+  }
+</style>
