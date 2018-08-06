@@ -26,7 +26,7 @@
           </Container>
         </Draggable>
         <Draggable :key="3" class="col-sm-2 border border-danger pb-3 mr-3 min-height">
-          <h5 class="border-bottom pt-3 text-danger">PENDING</h5>
+          <h5 class="border-bottom pt-3 text-danger">IN PROGRESS</h5>
           <Container
             group-name="col"
             @drop="(e) => onCardDrop(3, e)"
@@ -40,7 +40,7 @@
           </Container>
         </Draggable>
         <Draggable :key="1" class="col-sm-2 border border-primary pb-3 mr-3 min-height">
-          <h5 class="border-bottom pt-3 text-primary">DOING</h5>
+          <h5 class="border-bottom pt-3 text-primary">TEST</h5>
           <Container
             group-name="col"
             @drop="(e) => onCardDrop(1, e)"
@@ -111,7 +111,7 @@ export default {
       if (dropResult.addedIndex !== null) {
         let newStatus = columnId
         let idTodo = dropResult.droppedElement.id
-        todoRef.child(this.currentUserId).child(idTodo).update({status: newStatus})
+        todoRef.child(this.currentUserId).child(idTodo).update({status: newStatus, progress: 0, testProgress: 0})
       }
     },
 
@@ -149,16 +149,28 @@ export default {
     },
     completeTodo (todo) {
       let idTodo = todo['.key']
+      let testProgress = todo.testProgress ? todo.testProgress : 0
       let progress = todo.progress ? todo.progress : 0
+      let status = todo.status
       if (progress == 100) {
+        todo.status = 1
+      }
+      if (testProgress == 100) {
         todo.status = 2
+      }
+      if (status != todo.status){
+        progress = 0
+        testProgress = 0
       }
       todoRef.child(this.currentUserId).child(idTodo).update({
         dueDate: todo.dueDate,
         titleText: todo.titleText,
         projectText: todo.projectText,
         progress: progress >= 0 ? (progress > 100 ? 100 : progress) : 0,
-        status: todo.status
+        testProgress: testProgress >= 0 ? (testProgress > 100 ? 100 : testProgress) : 0,
+        status: todo.status,
+        assignee: todo.assignee,
+        estimate: todo.estimate
       })
       swal('Success!', 'To-Do completed!', 'success')
     },
