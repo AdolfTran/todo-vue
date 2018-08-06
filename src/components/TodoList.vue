@@ -3,7 +3,7 @@
     <h1 class="border-bottom">Vue.js Todo App</h1>
     <button v-on:click="logout" class="text-danger">Logout</button>
     <div class='container-fluid'>
-      <create-todo v-on:a="createTodo"></create-todo>
+      <CreateTodo></CreateTodo>
       <Container orientation="horizontal"
                  @drop="onColumnDrop($event)"
                  drag-handle-selector=".column-drag-handle"
@@ -116,7 +116,7 @@ export default {
     },
 
     getCardPayload: function (columnId) {
-      console.log('getCardPayload', columnId)
+      // console.log('getCardPayload', columnId)
       // return index => {
       //   return this.scene.children.filter(p => p.id === columnId)[0].children[
       //     index
@@ -150,11 +150,15 @@ export default {
     completeTodo (todo) {
       let idTodo = todo['.key']
       let progress = todo.progress ? todo.progress : 0
+      if (progress == 100) {
+        todo.status = 2
+      }
       todoRef.child(this.currentUserId).child(idTodo).update({
         dueDate: todo.dueDate,
         titleText: todo.titleText,
         projectText: todo.projectText,
-        progress: progress <= 0 ? (progress > 100 ? 100 : progress) : 0
+        progress: progress >= 0 ? (progress > 100 ? 100 : progress) : 0,
+        status: todo.status
       })
       swal('Success!', 'To-Do completed!', 'success')
     },

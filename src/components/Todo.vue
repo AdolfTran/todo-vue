@@ -9,7 +9,7 @@
           <div class="progress-bar progress-bar-striped" role="progressbar" :style="'width:'  + (todo.progress ? todo.progress : 0) + '%'"> {{ todo.progress ? todo.progress : 0}} %</div>
         </div>
         <div class="row footer-todo">
-          <div class="col-lg-8">
+          <div class="col-lg-6 text-left">
           {{ todo.dueDate }}
           </div>
           <div class='extra content col-lg-4'>
@@ -40,12 +40,12 @@
             <label>Progress</label>
             <input v-model="todo.progress" type='number'>
           </div>
-          <div class='ui two button attached buttons'>
-            <button class='ui basic blue button' v-on:click="hideForm">
-              Close
-            </button>
-            <button class='ui basic blue button' v-on:click="completeTodo(todo)">
+          <div>
+            <button class='ui green button' v-on:click="completeTodo(todo)">
               Save
+            </button>
+            <button class='ui red button' v-on:click="hideForm">
+              Close
             </button>
           </div>
         </div>
@@ -58,7 +58,7 @@
 
 <script type="text/javascript">
 import {Draggable} from 'vue-smooth-dnd'
-
+import {todoRef} from '@/firebase'
 export default {
   props: ['todo'],
   components: {Draggable},
@@ -107,10 +107,13 @@ export default {
   .v-content{
     min-height: 50px;
     text-align: left;
-    padding-bottom: 5px;
+    padding: 8px;
   }
   .footer-todo{
     margin-bottom: -10px;
     margin-top: 5px;
+  }
+  .col-lg-6, .col-lg-4{
+    margin: 10px !important;
   }
 </style>
